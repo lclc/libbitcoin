@@ -150,7 +150,6 @@ BOOST_AUTO_TEST_CASE(serialize_deserialize)
     s.write_8_bytes(0x8040201011223344);
     s.write_big_endian<uint32_t>(0x80402010);
     s.write_variable_uint(1234);
-    s.write_data(uncast_type<uint32_t>(0xbadf00d));
     s.write_string("hello");
     auto ds = make_deserializer(data.begin(), s.iterator());
     BOOST_REQUIRE(ds.read_byte() == 0x80);
@@ -159,7 +158,6 @@ BOOST_AUTO_TEST_CASE(serialize_deserialize)
     BOOST_REQUIRE(ds.read_8_bytes() == 0x8040201011223344);
     BOOST_REQUIRE(ds.read_big_endian<uint32_t>() == 0x80402010);
     BOOST_REQUIRE(ds.read_variable_uint() == 1234);
-    BOOST_REQUIRE(cast_chunk<uint32_t>(ds.read_data(4)) == 0xbadf00d);
     BOOST_REQUIRE(ds.read_string() == "hello");
     BOOST_REQUIRE_THROW(ds.read_byte(), end_of_stream);
 }
